@@ -17,11 +17,19 @@ if __name__ == "__main__":
     print(readings.columns)
     print(stations.columns)
 
-    join_inner = readings.join(stations.set_index('id'), how='inner')
+    join_inner = readings.join(stations.set_index('id'), how='inner', on='id')
+    join_outer = readings.join(stations.set_index('id'), how='outer', on='id')
+    
     print(join_inner)
 
     sens_joined = sensors.join(stations_sensors.set_index('sensor_id'), how='outer', on='id')
     print(sens_joined)
+
+    sens_joined.drop(columns=['id'])
+    sens_joined.rename(columns={'station_id':"id"})
+    print(sens_joined)
+
+    sens_readings_stations_joined = join_outer.join(sens_joined.set_index('id'), how='outer', on='id')
 
     '''
     df1 = pd.DataFrame({'key': ['a','b','c','d','e','f'], "data1": [1,2,3,7,8,9]})
